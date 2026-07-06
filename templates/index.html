@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Premium Weather App</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<video autoplay muted loop class="video-bg">
+
+    <source
+    src="{{ url_for('static', filename='weather-video.mp4') }}"
+    type="video/mp4">
+
+</video>
+
+<div class="container">
+
+    <!-- TOP BAR -->
+
+    <div class="top-bar">
+
+        <h1>Weather App</h1>
+
+        <div class="clock" id="clock"></div>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <form method="POST" class="search-box">
+
+        <select name="city">
+
+            {% for city in cities %}
+
+            <option value="{{ city }}">
+                {{ city }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <!-- ERROR -->
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if weather %}
+
+    <!-- CURRENT WEATHER -->
+
+    <div class="weather-card">
+
+        <div class="left">
+
+            <h2>
+                {{ weather.city }},
+                {{ weather.country }}
+            </h2>
+
+            <h1>{{ weather.temp }}°C</h1>
+
+            <p>{{ weather.description }}</p>
+
+        </div>
+
+        <div class="right">
+
+            <img
+            src="https://openweathermap.org/img/wn/{{ weather.icon }}@4x.png">
+
+        </div>
+
+    </div>
+
+    <!-- DETAILS -->
+
+    <div class="details">
+
+        <div class="detail-card">
+
+            <i class="fa-solid fa-droplet"></i>
+
+            <h3>Humidity</h3>
+
+            <p>{{ weather.humidity }}%</p>
+
+        </div>
+
+        <div class="detail-card">
+
+            <i class="fa-solid fa-wind"></i>
+
+            <h3>Wind Speed</h3>
+
+            <p>{{ weather.wind }} km/h</p>
+
+        </div>
+
+    </div>
+
+    <!-- FORECAST -->
+
+    <h2 class="forecast-title">5 Day Forecast</h2>
+
+    <div class="forecast-container">
+
+        {% for item in forecast %}
+
+        <div class="forecast-card">
+
+            <h3>{{ item.date }}</h3>
+
+            <img
+            src="https://openweathermap.org/img/wn/{{ item.icon }}@2x.png">
+
+            <p>{{ item.temp }}°C</p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script>
+
+function updateClock(){
+
+    const now = new Date();
+
+    const time = now.toLocaleTimeString();
+
+    document.getElementById("clock").innerHTML = time;
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+</script>
+
+</body>
+</html>
